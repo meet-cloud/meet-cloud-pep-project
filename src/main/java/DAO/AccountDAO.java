@@ -6,11 +6,7 @@ import Util.ConnectionUtil;
 
     public class AccountDAO {
      
-        private final Connection connection;
     
-        public AccountDAO(Connection connection) {
-            this.connection = connection;
-        }
     
         /**
          * Inserts a new account into the database.

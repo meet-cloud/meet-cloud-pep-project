@@ -15,6 +15,10 @@ import io.javalin.http.Context;
  */
 public class SocialMediaController {
       AccountService accountService;
+
+      public SocialMediaController(){
+        this.accountService = new AccountService();
+      }
     
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test

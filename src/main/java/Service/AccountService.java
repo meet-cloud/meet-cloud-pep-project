@@ -9,7 +9,7 @@ public class AccountService{
     private  AccountDAO accountDAO;
 
     public AccountService(){
-        accountDAO = new AccountDAO(null);
+        accountDAO = new AccountDAO();
     }
 
     public AccountService(AccountDAO accountDAO) {
@@ -21,7 +21,7 @@ public class AccountService{
         if(account.getPassword() == null || account.getPassword().length() < 4){
             return null;
         }
-        if(account.getUsername() == null){
+        if(account.getUsername().isBlank()){
             return null;
         }
         if(accountDAO.usernameExists(account.getUsername())){
