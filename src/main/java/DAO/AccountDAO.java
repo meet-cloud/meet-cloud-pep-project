@@ -55,4 +55,40 @@ import Util.ConnectionUtil;
             }
             return false;
         }
+
+        public Account getAccountByUsernameAndPassword(String username, String password) {
+            Connection conn = ConnectionUtil.getConnection();
+            try{
+            String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setString(1, username);
+                stmt.setString(2, password);
+                ResultSet rs = stmt.executeQuery();
+    
+                if (rs.next()) {
+                    return new Account(
+                        rs.getInt("account_id"),
+                        rs.getString("username"),
+                        rs.getString("password") // Consider hashing passwords in production
+                    );
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public boolean userIdExists(int accountId) {
+            String sql = "SELECT * FROM Account WHERE account_id = ?";
+            try (Connection conn = ConnectionUtil.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+                stmt.setInt(1, accountId);
+                ResultSet rs = stmt.executeQuery();
+                return rs.next(); // Returns true if a user exists with this ID
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
     }

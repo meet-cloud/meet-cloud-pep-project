@@ -1,9 +1,13 @@
 package Controller;
 
+import java.util.logging.Handler;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import Service.MessageService;
 import Model.Account;
+import Model.Message;
+
 import Service.AccountService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -15,6 +19,8 @@ import io.javalin.http.Context;
  */
 public class SocialMediaController {
       AccountService accountService;
+      MessageService messageService;
+
 
       public SocialMediaController(){
         this.accountService = new AccountService();
@@ -28,6 +34,8 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register", this::postRegisterHandler);
+        app.post("/login", this::postLoginHandler);
+        app.post("/messages", this::postCreateMessage);
 
         return app;
     }
@@ -45,9 +53,37 @@ public class SocialMediaController {
         }else{
             ctx.status(200).json(addedaccount);
         }
-
-       
     }
 
+    public void postLoginHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account loginRequest = mapper.readValue(ctx.body(), Account.class); 
+        Account authenticatedAccount = accountService.authenticate(loginRequest);
+        if (authenticatedAccount != null) {
+            ctx.status(200).json(authenticatedAccount);
+        } else {
+            ctx.status(401);
+        }
+    }
+       
 
+    private void postCreateMessage(Context ctx) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message createdMessage = messageService.createMessage(message);
+        if (createdMessage != null) {
+            ctx.status(200).json(createdMessage);
+        } else {
+            ctx.status(400);
+        }
+    } 
+     
 }
+        
+
+
+
+       
+
+
+

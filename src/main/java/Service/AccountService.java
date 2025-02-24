@@ -29,4 +29,8 @@ public class AccountService{
         }
         return accountDAO.insertAccount(account);
     }
+
+    public Account authenticate(Account account) {
+        return accountDAO.getAccountByUsernameAndPassword(account.getUsername(),account.getPassword());
+    }
 }
