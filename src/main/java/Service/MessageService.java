@@ -7,17 +7,14 @@ import java.util.ArrayList;
 
 public class MessageService {
     private MessageDAO messageDAO;
-    private AccountDAO accountDAO;
+    
 
 
     public MessageService(MessageDAO messageDAO) {
         this.messageDAO = messageDAO;
     }
 
-    public MessageService(MessageDAO messageDAO, AccountDAO accountDAO) {
-        this.messageDAO = messageDAO;
-        this.accountDAO = accountDAO;
-    }
+    
 
      public MessageService(){
 
@@ -46,5 +43,14 @@ public class MessageService {
 
         // Save message to the database
         return messageDAO.createNewMessage(message);
+    }
+
+
+    public List<Message> retrieveAllMessages() {
+        return messageDAO.getAllMessages();
+    }
+
+    public Message retrieveMessageById(int messageId) {
+        return messageDAO.getMessageById(messageId);
     }
 }

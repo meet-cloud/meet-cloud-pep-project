@@ -4,6 +4,8 @@ import java.util.logging.Handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import DAO.MessageDAO;
 import Service.MessageService;
 import Model.Account;
 import Model.Message;
@@ -27,7 +29,7 @@ public class SocialMediaController {
 
       public SocialMediaController(){
         this.accountService = new AccountService();
-        this.messageService = new MessageService();
+        this.messageService = new MessageService((new MessageDAO()));
       }
     
     /**
@@ -40,6 +42,8 @@ public class SocialMediaController {
         app.post("/register", this::postRegisterHandler);
         app.post("/login", this::postLoginHandler);
         app.post("/messages", this::postCreateMessage);
+        app.get("/messages", this::getAllMessages);
+        app.get("/messages/{message_id}", this::getMessageById);
        
 
         return app;
@@ -82,6 +86,24 @@ public class SocialMediaController {
             ctx.status(200).json(createdMessage);
         } else {
             ctx.status(400);
+        }
+    }
+
+
+    public void getAllMessages(Context ctx) throws JsonProcessingException {
+        List<Message> messages = messageService.retrieveAllMessages();
+        ctx.status(200).json(messages);  // Automatically returns 200 OK
+    }
+
+
+    public void getMessageById(Context ctx) throws JsonProcessingException {
+        int messageId = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.retrieveMessageById(messageId);
+        
+        if (message != null) {
+            ctx.json(message);  // Return message JSON
+        } else {
+            ctx.status(200).json(""); // Return empty body with 200 OK
         }
     }
 }
