@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import Service.MessageService;
 import Model.Account;
 import Model.Message;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.SQLException;
 
 import Service.AccountService;
 import io.javalin.Javalin;
@@ -24,6 +27,7 @@ public class SocialMediaController {
 
       public SocialMediaController(){
         this.accountService = new AccountService();
+        this.messageService = new MessageService();
       }
     
     /**
@@ -36,6 +40,7 @@ public class SocialMediaController {
         app.post("/register", this::postRegisterHandler);
         app.post("/login", this::postLoginHandler);
         app.post("/messages", this::postCreateMessage);
+       
 
         return app;
     }
@@ -67,18 +72,29 @@ public class SocialMediaController {
     }
        
 
-    private void postCreateMessage(Context ctx) throws JsonProcessingException{
+    private void postCreateMessage(Context ctx) throws JsonProcessingException {
+       
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
         Message createdMessage = messageService.createMessage(message);
+        
         if (createdMessage != null) {
             ctx.status(200).json(createdMessage);
         } else {
             ctx.status(400);
         }
-    } 
-     
+    }
 }
+        
+    
+
+ 
+    
+
+
+    
+     
+
         
 
 

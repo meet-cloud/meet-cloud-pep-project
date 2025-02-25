@@ -78,17 +78,5 @@ import Util.ConnectionUtil;
             return null;
         }
 
-        public boolean userIdExists(int accountId) {
-            String sql = "SELECT * FROM Account WHERE account_id = ?";
-            try (Connection conn = ConnectionUtil.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setInt(1, accountId);
-                ResultSet rs = stmt.executeQuery();
-                return rs.next(); // Returns true if a user exists with this ID
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
+       
     }
