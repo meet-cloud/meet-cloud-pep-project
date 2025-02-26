@@ -8,12 +8,8 @@ import Util.ConnectionUtil;
      
     
     
-        /**
-         * Inserts a new account into the database.
-         *
-         * @param account The account to be created.
-         * @return The created account with the generated account_id.
-         */
+        //  To Insert New Account:
+
         public Account insertAccount(Account account) {
             Connection conn = ConnectionUtil.getConnection();
             try{
@@ -22,7 +18,7 @@ import Util.ConnectionUtil;
                 stmt.setString(1, account.getUsername());
                 stmt.setString(2, account.getPassword());
                 stmt.executeUpdate();
-                ResultSet rs = stmt.getGeneratedKeys();
+                ResultSet rs = stmt.getGeneratedKeys();  //Get generated keys for Account_id
                 if (rs.next()) {
                     int generate_key = (int)rs.getLong(1);
                     return new Account(generate_key,account.getUsername(),account.getPassword());  
@@ -33,12 +29,9 @@ import Util.ConnectionUtil;
             return null;
         }
     
-        /**
-         * Retrieves an account by username.
-         *
-         * @param username The username to search for.
-         * @return An Optional containing the account if found.
-         */
+
+        // To Validate Username:
+
         public boolean usernameExists(String username) {
             Connection conn = ConnectionUtil.getConnection();
         try{
@@ -56,6 +49,9 @@ import Util.ConnectionUtil;
             return false;
         }
 
+
+        //Login With Username and Password:
+
         public Account getAccountByUsernameAndPassword(String username, String password) {
             Connection conn = ConnectionUtil.getConnection();
             try{
@@ -69,7 +65,7 @@ import Util.ConnectionUtil;
                     return new Account(
                         rs.getInt("account_id"),
                         rs.getString("username"),
-                        rs.getString("password") // Consider hashing passwords in production
+                        rs.getString("password") 
                     );
                 }
             } catch (SQLException e) {

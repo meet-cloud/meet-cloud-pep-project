@@ -2,7 +2,7 @@ package Service;
 
 import DAO.AccountDAO;
 import Model.Account;
-import java.sql.SQLException;
+
 
 public class AccountService{
     
@@ -18,18 +18,18 @@ public class AccountService{
 
     public Account registerAccount(Account account){
 
-        if(account.getPassword() == null || account.getPassword().length() < 4){
+        //Validation for Empty Username and Password
+        if(account.getPassword() == null || account.getPassword().length() < 4  || account.getUsername().isBlank()){
             return null;
         }
-        if(account.getUsername().isBlank()){
-            return null;
-        }
+        //Validation For User to Exist
         if(accountDAO.usernameExists(account.getUsername())){
             return null;
         }
         return accountDAO.insertAccount(account);
     }
 
+    
     public Account authenticate(Account account) {
         return accountDAO.getAccountByUsernameAndPassword(account.getUsername(),account.getPassword());
     }
